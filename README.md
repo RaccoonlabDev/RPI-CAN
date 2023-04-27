@@ -31,8 +31,20 @@ This is a documention repo on how can you make your Raspberry Pi a medium for de
 
 * Inteface Configuration
   
-  1. update your packages ```sudo apt update && sudo apt upgrade;```
-  2. append the following lines to your configration file  located in ```/boot/config.txt```:
+  1. update your packages 
+  
+  ```
+  sudo apt update && sudo apt upgrade
+  ```
+
+  2. append the following lines to your configration file  located in 
+
+  ```
+  sudo nano /boot/config.txt
+  ```
+
+  do next changes:
+
         ```
         [all]
         dtparam=spi=on
@@ -40,12 +52,40 @@ This is a documention repo on how can you make your Raspberry Pi a medium for de
         # in our case
         dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=12
         ```
-  3. install can-utils ```sudo apt install can-utils```
-  4. evaluate if the can0 is on your SPI bus ```ls /sys/bus/spi/devices/spi0.0/net/```(it should show 'can0')
-  5. set up yor can interface ```sudo ip link set can0 up type can bitrate 1000000```
+
+  ```
+  sudo reboot
+  ```
+
+  3. install can-utils 
+  
+  ```
+  sudo apt install can-utils
+  ```
+
+  4. evaluate if the can0 is on your SPI bus (it should show 'can0')
+
+  ```
+  ls /sys/bus/spi/devices/spi0.0/net/
+  ```
+
+  
+  5. set up yor can interface 
+  
+  ```
+  sudo ip link set can0 up type can bitrate 1000000
+  ```
+
        > the bitrate for our case is 1000000, you may change it to your preffered bitrate
-  6. check if can0 is interface ```sudo ifconfig```
-        ```
+  6. check if can0 is interface 
+  
+  ```
+  sudo ifconfig
+  ```
+  
+  it should be something like this
+
+  ```
         mbed@ahuratus:~ $ ifconfig
         can0: flags=193<UP,RUNNING,NOARP>  mtu 16
                 unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 10  (UNSPEC)
@@ -54,14 +94,20 @@ This is a documention repo on how can you make your Raspberry Pi a medium for de
                 TX packets 0  bytes 0 (0.0 B)
                 TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
-        ```
+  ```
+
   7. Finally now you can send or receive something overthe bus using ``` candump ``` and  ```cansend```
+
         ```
         mbed@ahuratus:~ $ candump can0
         can0  1801555C   [8]  1A 00 00 00 00 02 00 D4
         can0  1801555C   [8]  1B 00 00 00 00 02 00 D5
         can0  1801555C   [8]  1B 00 00 00 00 02 00 D6
         ```
+
+## DroneCAN
+
+To test Dronecan just use one of examples in the next repo https://github.com/dronecan/pydronecan
 
 ## SWD setup
 > via BCM2835 and [Open On-Chip Debugger](http://openocd.org) 
